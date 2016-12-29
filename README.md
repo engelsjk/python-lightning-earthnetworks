@@ -1,6 +1,6 @@
 # python-lightning-earthnetworks
 
-This script maps real-time lightning strike locations in the continental United States using a TCP socket datafeed from Earth Networks. 
+This script maps real-time lightning strike locations in the continental United States using a TCP socket datafeed of lightning data from Earth Networks. 
 
 ![Animated-Lightning](screenshots/screenshot_lightning-animated.Gif)
 

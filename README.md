@@ -20,6 +20,8 @@ Next a <code>while True:</code> loop starts grabbing messages from the socket co
 
 ![Animated-Lightning](screenshots/screenshot_lightning-data.png)
 
+<h1>WHY</h1>
+
 Once parsed from the socket connection, these data payloads can be used to upload datapoints to a database, trigger other actions, or plot lightning strike locations as in this script. 
 
 For example, this script could be used as a simple alerting tool to identify lightning strikes that occur near valuable assets (shown as blue dots in the map below).

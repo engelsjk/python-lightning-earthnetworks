@@ -10,28 +10,27 @@ import numpy as np
 #####################################
 ### REFERENCES
 
-# Parse byte string payload: http://stackoverflow.com/questions/27428936/python-size-of-message-to-send-via-socket
-
-# Map of CONUS: http://geodesygina.com/matplotlib.html
-
-# Plot lat/lng point on map: https://peak5390.wordpress.com/2012/12/08/matplotlib-basemap-tutorial-plotting-points-on-a-simple-map/
-
 # ENTLN Data Feed Documentation: http://www.bandgap.cs.rice.edu/classes/comp410/resources/SiteAssets/Using%20IoT/WeatherBug%20API%20info/ENTLN%20Lightning%20Data%20Feed%20v3%20ICD%20-%20UM67.pdf
+# Parse byte string payload: http://stackoverflow.com/questions/27428936/python-size-of-message-to-send-via-socket
+# Map of CONUS: http://geodesygina.com/matplotlib.html
+# Plot lat/lng point on map: https://peak5390.wordpress.com/2012/12/08/matplotlib-basemap-tutorial-plotting-points-on-a-simple-map/
 
 #####################################
 ### CONNECTION INFO
 
+# TCP URL FOR ENTLN
 TCP_URL = 'lx.datamart.earthnetworks.com'
 TCP_PORT = 80
 
-TCP_SSL_URL = TCP_URL
-TCP_SSL_PORT = 443
+# TCP URL (SSL) FOR ENTLN
+#TCP_SSL_URL = TCP_URL
+#TCP_SSL_PORT = 443
 
 #####################################
-### AUTHENTICATION MESSAGE
+### AUTHENTICATION MESSAGE 
 
-# PARTER ID
-a_partner_id = 'D4812B65-5625-43C8-BB29-ED2D1C23544F'
+# PARTER ID (PROVIDED BY EARTH NETWORKS)
+a_partner_id = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
 
 # VERSION
 a_version = '3'
@@ -47,6 +46,7 @@ a_format = '1'
 # 3 - Combination Flash and Pulse
 a_type = '2'
 
+# AUTHENTICATION PAYLOAD 
 msg_authenticate = {
 	"p": a_partner_id,
 	"v": a_version,
@@ -57,6 +57,7 @@ msg_authenticate = {
 #####################################
 ### DEFINE FUNCTIONS
 
+# INITIALIZE MAP OF CONUS
 def initMap():
 
 	# Plot Interactive Mode
@@ -87,6 +88,7 @@ def initMap():
 	
 	return m
 	
+# PLOT LIGHTNING STRIKE ON MAP
 def plotStrike(m, data):
 
 	# Extract Lat/Lon from Message
@@ -101,6 +103,12 @@ def plotStrike(m, data):
 	
 	# Pause Plot to Allow Refresh
 	plt.pause(0.1)
+
+# Get Socket Message
+def get_msg(s):
+	header_bytes = 4
+	count = struct.unpack('>i', _get_block(s, header_bytes))[0]
+	return _get_block(s, count-header_bytes)
 
 # Get Message Block
 def _get_block(s, count):
@@ -117,12 +125,6 @@ def _get_block(s, count):
                 return ''
         buf += buf2		
     return buf
-
-# Get Socket Message
-def get_msg(s):
-	header_bytes = 4
-	count = struct.unpack('>i', _get_block(s, header_bytes))[0]
-	return _get_block(s, count-header_bytes)
 
 #####################################
 ### INITIALIZE MAP
@@ -145,11 +147,6 @@ print msg_authenticate_o
 print ''
 s.send(msg_authenticate_o)
 
-###
-striketype = a_type
-datasource = "Earth Networks Data Feed Version 3.0"
-###
-
 # Start Getting Messages...
 while True:  
 
@@ -161,8 +158,10 @@ while True:
 	print payload_o
 	print ''
 
-	# Check if strike, then plot... (better way to check if payload is strike data?)
+	# Check if strike, then... 
+	# NOTE: This is a crude way to validate a data payload vs a keep-alive payload.
 	if 'latitude' in payload_o:
 			
+		# PLOT LIGHTNING STRIKE
 		plotStrike(m,payload_o)
  

@@ -1,6 +1,6 @@
 # python-lightning-earthnetworks
 
-<h1>Show Lightning Strikes in CONUS via Earth Networks<h1>
+Show Lightning Strikes in CONUS via Earth Networks
 
-![Animated-Lightning](screenshots/screenshot_lightning-animated.gif)
+![Animated-Lightning](screenshots/screenshot_lightning-animated.Gif)
 
